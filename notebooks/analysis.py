@@ -15,7 +15,8 @@ def inspect_data(df):
 
     print(df.head())
 
-
+    df=df.drop("Unnamed: 70", axis=1)
+    print("Shape:",df.shape)
 
 
 if __name__=="__main__":
