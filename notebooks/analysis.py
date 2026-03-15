@@ -26,6 +26,9 @@ def inspect_data(df):
 
     print("\nDataset Info:")
     print(df.info())
+    
+    print("\nNumber of NAN values in cleaned DataFrame:")
+    print(cleaned_df.isnull().sum())
 
 
 def clean_data(df):
@@ -33,6 +36,10 @@ def clean_data(df):
     year_columns=[str(year) for year in range(1990,2024)]
     df=df[["Country Name","Country Code","Indicator Name","Indicator Code"]+year_columns]
     return df
+
+    #Nan strategy: leave as it is - Missing GDP data is intentional
+    #(there are non reporting countries). pandas aggregations skip NaNs by default.
+
 
 
 if __name__=="__main__":
