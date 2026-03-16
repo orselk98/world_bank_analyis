@@ -47,7 +47,7 @@ def clean_data(df):
     #(there are non reporting countries). pandas aggregations skip NaNs by default.
     df=df.drop("Unnamed: 70", axis=1)
     year_columns=[str(year) for year in range(1990,2024)]
-    df=df[["Country Name","Country Code","Indicator Name","Indicator Code"]+year_columns]
+    df=df[["Country Name","Country Code",]+year_columns]
     return df
 
 def merge_data(df, metadata_df):
@@ -56,6 +56,17 @@ def merge_data(df, metadata_df):
     drop_columns=["SpecialNotes","TableName","Unnamed: 5"]
     merged_df=merged_df.drop(columns=drop_columns, errors='ignore')
     return merged_df
+
+def melt_data(merged_df):
+    df_melted=merged_df.melt(
+        id_vars=["Country Name","Country Code","Region","IncomeGroup"],
+        var_name="Year",
+        value_name="GDP Growth Rate"
+    )
+    df_melted["Year"]=df_melted["Year"].astype(int)
+    return df_melted
+
+
 
    
 
@@ -75,3 +86,7 @@ if __name__=="__main__":
     merged_df=merge_data(cleaned_df, metadata_df)
     print("\nMerged DataFrame shape:",merged_df.shape)
     inspect_data(merged_df)
+
+    melted_df=melt_data(merged_df)
+    print("\nMelted DataFrame shape:",melted_df.shape)
+    inspect_data(melted_df)
