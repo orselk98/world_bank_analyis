@@ -85,7 +85,13 @@ def analyze_data(df):
     print(f"\nMean GDP Growth Rate by Region from {start_year} to {end_year}:")
     print(gdp_after_crisis)
 
-
+    crisis_analysis=pd.DataFrame({
+        "Before Crisis": gdp_before_crisis,
+        "After Crisis": gdp_after_crisis,
+        "Difference": gdp_after_crisis - gdp_before_crisis
+    })
+    print("\nGDP Growth Rate Before and After 2008 Crisis:")
+    print(crisis_analysis)
 
 
    
