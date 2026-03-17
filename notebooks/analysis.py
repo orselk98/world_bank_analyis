@@ -66,6 +66,26 @@ def melt_data(merged_df):
     df_melted["Year"]=df_melted["Year"].astype(int)
     return df_melted
 
+def analyze_data(df):
+    #What is the mean GDP growth rate by region?
+    mean_gdp_by_region=df.groupby("Region")["GDP Growth Rate"].mean()
+    print("\nMean GDP Growth Rate by Region:")
+    print(mean_gdp_by_region)
+
+    #How did each region's GDP growth change around 2008 financial crisis?
+    start_year=2000
+    end_year=2007
+    gdp_before_crisis=df[df["Year"].between(start_year, end_year)].groupby("Region")["GDP Growth Rate"].mean().sort_values(ascending=False)
+    print(f"\nMean GDP Growth Rate by Region from {start_year} to {end_year}:")
+    print(gdp_before_crisis)
+
+    start_year=2008
+    end_year=2010
+    gdp_after_crisis=df[df["Year"].between(start_year,end_year)].groupby("Region")["GDP Growth Rate"].mean().sort_values(ascending=False)
+    print(f"\nMean GDP Growth Rate by Region from {start_year} to {end_year}:")
+    print(gdp_after_crisis)
+
+
 
 
    
@@ -75,18 +95,20 @@ def melt_data(merged_df):
 if __name__=="__main__":
     df=pd.read_csv("data/raw/API_NY.GDP.MKTP.KD.ZG_DS2_en_csv_v2_107.csv", skiprows=4)
     metadata_df=pd.read_csv("data/raw/Metadata_Country_API_NY.GDP.MKTP.KD.ZG_DS2_en_csv_v2_107.csv")
-    inspect_data(df)
+    #inspect_data(df)
 
     cleaned_df=clean_data(df)
-    inspect_data(cleaned_df)
+    #inspect_data(cleaned_df)
     
-    print("\nCleaned DataFrame shape:",cleaned_df.shape)
-    inspect_metadata(metadata_df)
+    #inspect_metadata(metadata_df)
     
     merged_df=merge_data(cleaned_df, metadata_df)
-    print("\nMerged DataFrame shape:",merged_df.shape)
-    inspect_data(merged_df)
+    #inspect_data(merged_df)
 
     melted_df=melt_data(merged_df)
-    print("\nMelted DataFrame shape:",melted_df.shape)
-    inspect_data(melted_df)
+    #inspect_data(melted_df)
+    print(melted_df.shape)
+    print(melted_df.head(10))
+
+    #data analysis
+    analyze_data(melted_df)
