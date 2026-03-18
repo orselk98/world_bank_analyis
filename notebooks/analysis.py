@@ -93,8 +93,18 @@ def analyze_data(df):
     print("\nGDP Growth Rate Before and After 2008 Crisis:")
     print(crisis_analysis)
 
+    print("\nMean GDP Growth Rate by Income Group:")
+    print(df.groupby("IncomeGroup")["GDP Growth Rate"].mean().sort_values(ascending=False))
 
-   
+    filter_nan_values=df[df["Region"].notna()]
+    print("\nMean GDP Growth Rate by Income Group (excluding NaN values):")
+    print(filter_nan_values.groupby("IncomeGroup")["GDP Growth Rate"].mean().sort_values(ascending=False))
+
+    print("\nBest and Worst Performing Countries overall:")
+    mean_gdp_by_country=filter_nan_values.groupby("Country Name")['GDP Growth Rate'].mean().sort_values(ascending=False)
+    print(mean_gdp_by_country.head(10))
+    print(mean_gdp_by_country.tail(10))
+    
 
 
 
