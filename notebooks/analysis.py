@@ -105,8 +105,18 @@ def analyze_data(df):
     mean_gdp_by_country=filter_nan_values.groupby("Country Name")['GDP Growth Rate'].mean().sort_values(ascending=False)
     print(mean_gdp_by_country.head(10))
     print(mean_gdp_by_country.tail(10))
-    
 
+
+    #Volatility analysis: Which countries had the most volatile GDP growth rates?
+    print("\nMost Volatile Countries (Top 10):")
+    volatility_by_country=filter_nan_values.groupby("Country Name")["GDP Growth Rate"].std().sort_values(ascending=False)
+    print(volatility_by_country.head(10))
+    
+    #Covid-19 impact: How did GDP growth rates change in 2020?
+    print("\nCovid-19 Impact:")
+    covid_years=filter_nan_values[filter_nan_values["Year"]==2020].groupby("Country Name")["GDP Growth Rate"].mean()
+    print(covid_years.sort_values(ascending=True).head(10))  # Worst affected
+    print(covid_years.sort_values(ascending=False).head(10))  # Best
 
 
 if __name__=="__main__":
