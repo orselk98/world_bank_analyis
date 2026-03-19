@@ -96,9 +96,10 @@ def analyze_data(df):
     print("\nMean GDP Growth Rate by Income Group:")
     print(df.groupby("IncomeGroup")["GDP Growth Rate"].mean().sort_values(ascending=False))
 
-    filter_nan_values=df[df["Region"].notna()]
-    print("\nMean GDP Growth Rate by Income Group (excluding NaN values):")
-    print(filter_nan_values.groupby("IncomeGroup")["GDP Growth Rate"].mean().sort_values(ascending=False))
+    filter_nan_values=df[df["Region"].notna() & df["IncomeGroup"].notna() & df["GDP Growth Rate"].notna()]
+
+
+    print("--"*50)
 
     print("\nBest and Worst Performing Countries overall:")
     mean_gdp_by_country=filter_nan_values.groupby("Country Name")['GDP Growth Rate'].mean().sort_values(ascending=False)
