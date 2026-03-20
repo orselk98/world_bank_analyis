@@ -1,6 +1,9 @@
 import pandas as pd
 import os
+import matplotlib.pyplot as plt
+import seaborn as sns
 print(os.getcwd())
+
 
 
 
@@ -119,6 +122,24 @@ def analyze_data(df):
     print(covid_years.sort_values(ascending=False).head(10))  # Best
 
 
+def visualize_data(df):
+    #Chart1
+    mean_gdp_by_region=df.groupby("Region")["GDP Growth Rate"].mean().sort_values()
+    print(mean_gdp_by_region.reset_index())
+    print(mean_gdp_by_region.reset_index().columns.tolist())
+    
+    plt.figure(figsize=(10,6))
+    plt.title("Regional AVG GDP growth")
+    plt.xlabel("Average GDP Growth Rate")
+    plt.ylabel("Region")
+    sns.barplot(x='GDP Growth Rate', y='Region', data=mean_gdp_by_region.reset_index(), palette="RdYlGn")
+    plt.axvline(x=0, color='black', linewidth=0.8)
+    plt.tight_layout()
+    plt.savefig('Output/Regional_AVG_GDP_growth')
+    plt.show()
+    
+
+
 if __name__=="__main__":
     df=pd.read_csv("data/raw/API_NY.GDP.MKTP.KD.ZG_DS2_en_csv_v2_107.csv", skiprows=4)
     metadata_df=pd.read_csv("data/raw/Metadata_Country_API_NY.GDP.MKTP.KD.ZG_DS2_en_csv_v2_107.csv")
@@ -139,3 +160,6 @@ if __name__=="__main__":
 
     #data analysis
     analyze_data(melted_df)
+
+    #visualisation
+    visualize_data(melted_df)
