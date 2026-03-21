@@ -168,6 +168,22 @@ def visualize_data(df, crisis_analysis, covid_years):
     plt.savefig('Output/Covid19_Impact_GDP_Growth_2020')
     plt.show()
 
+    #Chart 4
+    filtered_countries=["Guyana","Macao SAR, China","Germany"]
+    filtered_data=df[df["Country Name"].isin(filtered_countries)]
+    plt.figure(figsize=(10,6))
+    plt.title("GDP Growth Rate Trends for Selected Countries")
+    plt.xlabel("Year")
+    plt.ylabel("GDP Growth Rate")
+    sns.lineplot(x='Year', y='GDP Growth Rate', hue='Country Name', data=filtered_data, marker="o")
+    plt.axhline(y=0, color='black', linewidth=0.8)
+    plt.tight_layout()
+    plt.savefig('Output/GDP_Growth_Rate_Trends_Selected_Countries')
+    plt.show()
+
+
+    plt.figure(figsize=(10,6))
+
 
 
 if __name__=="__main__":
