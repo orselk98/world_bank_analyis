@@ -100,6 +100,7 @@ def analyze_data(df):
     print(df.groupby("IncomeGroup")["GDP Growth Rate"].mean().sort_values(ascending=False))
 
     filter_nan_values=df[df["Region"].notna() & df["IncomeGroup"].notna() & df["GDP Growth Rate"].notna()]
+    
 
 
     print("--"*50)
@@ -121,12 +122,13 @@ def analyze_data(df):
     print(covid_years.sort_values(ascending=True).head(10))  # Worst affected
     print(covid_years.sort_values(ascending=False).head(10))  # Best
 
+    return crisis_analysis
 
-def visualize_data(df):
+
+def visualize_data(df, crisis_analysis):
     #Chart1
     mean_gdp_by_region=df.groupby("Region")["GDP Growth Rate"].mean().sort_values()
-    print(mean_gdp_by_region.reset_index())
-    print(mean_gdp_by_region.reset_index().columns.tolist())
+
     
     plt.figure(figsize=(10,6))
     plt.title("Regional AVG GDP growth")
@@ -137,8 +139,22 @@ def visualize_data(df):
     plt.tight_layout()
     plt.savefig('Output/Regional_AVG_GDP_growth')
     plt.show()
-    
 
+    #Chart 2
+    crisis_melted=crisis_analysis.drop("Difference", axis=1).reset_index().melt(
+            id_vars=["Region"],
+            var_name="Period",
+            value_name="Average GDP Growth Rate"
+        )
+    plt.figure(figsize=(10,6))
+    plt.title("GDP Growth Rate Before and After 2008 Crisis")
+    plt.xlabel("Region")
+    plt.ylabel("Average GDP Growth Rate")
+    sns.barplot(x='Region', y='Average GDP Growth Rate',hue='Period', data=crisis_melted, palette="Set2")
+    plt.axhline(y=0, color='black', linewidth=0.8)
+    plt.tight_layout()
+    plt.savefig('Output/GDP_Growth_Rate_Before_After_Crisis')
+    plt.show()
 
 if __name__=="__main__":
     df=pd.read_csv("data/raw/API_NY.GDP.MKTP.KD.ZG_DS2_en_csv_v2_107.csv", skiprows=4)
@@ -158,8 +174,6 @@ if __name__=="__main__":
     print(melted_df.shape)
     print(melted_df.head(10))
 
-    #data analysis
-    analyze_data(melted_df)
-
     #visualisation
-    visualize_data(melted_df)
+    crisis_analysis=analyze_data(melted_df)
+    visualize_data(melted_df, crisis_analysis)
