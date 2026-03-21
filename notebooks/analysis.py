@@ -122,10 +122,10 @@ def analyze_data(df):
     print(covid_years.sort_values(ascending=True).head(10))  # Worst affected
     print(covid_years.sort_values(ascending=False).head(10))  # Best
 
-    return crisis_analysis
+    return crisis_analysis, covid_years
 
 
-def visualize_data(df, crisis_analysis):
+def visualize_data(df, crisis_analysis, covid_years):
     #Chart1
     mean_gdp_by_region=df.groupby("Region")["GDP Growth Rate"].mean().sort_values()
 
@@ -156,6 +156,20 @@ def visualize_data(df, crisis_analysis):
     plt.savefig('Output/GDP_Growth_Rate_Before_After_Crisis')
     plt.show()
 
+    #Chart 3
+    covid_years_sorted=covid_years.sort_values().head(10)
+    plt.figure(figsize=(10,6))
+    plt.title("Covid-19 Impact on GDP Growth in 2020")
+    plt.xlabel("Average GDP Growth Rate in 2020")
+    plt.ylabel("Country")
+    sns.barplot(x=covid_years_sorted.values, y=covid_years_sorted.index, palette="Reds_r")
+    plt.axvline(x=0, color='black', linewidth=0.8)
+    plt.tight_layout()
+    plt.savefig('Output/Covid19_Impact_GDP_Growth_2020')
+    plt.show()
+
+
+
 if __name__=="__main__":
     df=pd.read_csv("data/raw/API_NY.GDP.MKTP.KD.ZG_DS2_en_csv_v2_107.csv", skiprows=4)
     metadata_df=pd.read_csv("data/raw/Metadata_Country_API_NY.GDP.MKTP.KD.ZG_DS2_en_csv_v2_107.csv")
@@ -175,5 +189,5 @@ if __name__=="__main__":
     print(melted_df.head(10))
 
     #visualisation
-    crisis_analysis=analyze_data(melted_df)
-    visualize_data(melted_df, crisis_analysis)
+    crisis_analysis, covid_years=analyze_data(melted_df)
+    visualize_data(melted_df, crisis_analysis, covid_years)
